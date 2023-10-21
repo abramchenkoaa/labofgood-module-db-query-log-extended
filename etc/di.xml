@@ -1,0 +1,331 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright © 2023 Labofgood. All rights reserved.
+  ~ See COPYING.txt for license details.
+  ~
+  ~ @author    Anton Abramchenko <anton.abramchenko@labofgood.com>
+  ~ @copyright 2023 Labofgood
+  ~ @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="Labofgood_DbQueryLogExtended::Console_Command_SimilarityAnalysis"
+                      xsi:type="object">Labofgood\DbQueryLogExtended\Console\Command\SimilarityAnalysis</item>
+                <item name="Labofgood_DbQueryLogExtended::Console_Command_LogConverter"
+                      xsi:type="object">Labofgood\DbQueryLogExtended\Console\Command\LogConverter</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\Parser\Handler\LineHandlerInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\Parser\QueryLogParserInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\Parser\QueryLogParser" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\SimilarityAnalyzerInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\SimilarityAnalyzer" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\ReportGeneratorInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\ReportGenerator" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\LogRecordsCombinerInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\LogRecordsCombiner" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\ReportFormat\PrepperInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\ReportFormat\Prepper" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\ReportFormat\SimilarityAnalysisPrepperInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\ReportFormat\SimilarityAnalysisPrepper" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\Facade\SimilarityAnalysisFacadeInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\Facade\SimilarityAnalysisFacade" />
+    <preference for="Labofgood\DbQueryLogExtended\Api\Model\Service\Facade\LogsToReportFacadeInterface"
+                type="Labofgood\DbQueryLogExtended\Model\Service\Facade\LogsToReportFacade" />
+
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TimestampHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^## (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})$/</argument>
+            <argument name="key" xsi:type="string">timestamp</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\SqlHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^SQL: (.+)$/</argument>
+            <argument name="key" xsi:type="string">sql</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\AffHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^AFF: (\d+)$/</argument>
+            <argument name="key" xsi:type="string">aff</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TimeHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^TIME: (\d+\.\d+)$/</argument>
+            <argument name="key" xsi:type="string">time</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TypeHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^## \d+ ## (\w+)$/</argument>
+            <argument name="key" xsi:type="string">type</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\RequestUriHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^REQUEST URI: (.+)$/</argument>
+            <argument name="key" xsi:type="string">request_uri</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\CliCommandHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^CLI COMMAND: (.+)$/</argument>
+            <argument name="key" xsi:type="string">cli_command</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\RecordHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^RECORD: (.+)$/</argument>
+            <argument name="key" xsi:type="string">record</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\UidHandler"
+                 type="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\LineHandler">
+        <arguments>
+            <argument name="pattern" xsi:type="string">/^UID: (.+)$/</argument>
+            <argument name="key" xsi:type="string">uid</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\BindHandler">
+        <arguments>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="pattern" xsi:type="string">/^BIND: array \($/</argument>
+            <argument name="key" xsi:type="string">bind</argument>
+        </arguments>
+    </type>
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TraceHandler">
+        <arguments>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="pattern" xsi:type="string">/^TRACE:/</argument>
+            <argument name="key" xsi:type="string">trace</argument>
+        </arguments>
+    </type>
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\ReportGenerator">
+        <arguments>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="generatedFileName" xsi:type="string">report-</argument>
+        </arguments>
+    </type>
+
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\Parser\QueryLogParser">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="timestamp" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TimestampHandler</item>
+                <item name="uid" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\UidHandler</item>
+                <item name="record" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\RecordHandler</item>
+                <item name="request_uri" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\RequestUriHandler</item>
+                <item name="cli_command" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\CliCommandHandler</item>
+                <item name="type" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TypeHandler</item>
+                <item name="sql" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\SqlHandler</item>
+                <item name="bind" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\BindHandler</item>
+                <item name="aff" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\AffHandler</item>
+                <item name="time" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TimeHandler</item>
+                <item name="trace" xsi:type="object">Labofgood\DbQueryLogExtended\Model\Service\Parser\Handler\TraceHandler</item>
+            </argument>
+            <argument name="newSectionPattern" xsi:type="string">/^## (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})$/</argument>
+            <argument name="file" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\SimilarityAnalyzer">
+        <arguments>
+            <argument name="keyForSimilarity" xsi:type="string">sql</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Logger\File">
+        <plugin name="Labofgood_DbQueryLogExtended::add_uri_or_command_name_to_logger_record"
+                type="Labofgood\DbQueryLogExtended\Plugin\Db\Logger\File"
+                sortOrder="10" />
+    </type>
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\LogRecordsCombiner">
+        <arguments>
+            <argument name="fieldName" xsi:type="string">uid</argument>
+        </arguments>
+    </type>
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\ReportFormat\SimilarityAnalysisPrepper">
+        <arguments>
+            <argument name="sortKey" xsi:type="string">record</argument>
+            <argument name="headers" xsi:type="array">
+                <item name="0" xsi:type="string">UID</item>
+                <item name="10" xsi:type="string">RECORD</item>
+                <item name="20" xsi:type="string">QUERIES COUNT</item>
+                <item name="30" xsi:type="string">REQUEST URI/CLI COMMAND</item>
+                <item name="40" xsi:type="string">AVG EXECUTION TIME</item>
+                <item name="50" xsi:type="string">TOTAL EXECUTION TIME</item>
+                <item name="60" xsi:type="string">TIMESTAMP</item>
+                <item name="70" xsi:type="string">TYPE</item>
+                <item name="80" xsi:type="string">SQL</item>
+                <item name="90" xsi:type="string">BIND</item>
+                <item name="100" xsi:type="string">AFFECTED ROWS</item>
+                <item name="110" xsi:type="string">TRACE</item>
+            </argument>
+            <argument name="map" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">uid</item>
+                    </item>
+                </item>
+                <item name="10" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">record</item>
+                    </item>
+                </item>
+                <item name="20" xsi:type="array">
+                    <item name="method" xsi:type="string">queriesCount</item>
+                </item>
+                <item name="30" xsi:type="array">
+                    <item name="method" xsi:type="string">requestUri</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key1" xsi:type="string">request_uri</item>
+                        <item name="key2" xsi:type="string">cli_command</item>
+                    </item>
+                </item>
+                <item name="40" xsi:type="array">
+                    <item name="method" xsi:type="string">avgExecutionTime</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">time</item>
+                    </item>
+                </item>
+                <item name="50" xsi:type="array">
+                    <item name="method" xsi:type="string">totalExecutionTime</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">time</item>
+                    </item>
+                </item>
+                <item name="60" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">timestamp</item>
+                    </item>
+                </item>
+                <item name="70" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">type</item>
+                    </item>
+                </item>
+                <item name="80" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">sql</item>
+                    </item>
+                </item>
+                <item name="90" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">bind</item>
+                    </item>
+                </item>
+                <item name="100" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">aff</item>
+                    </item>
+                </item>
+                <item name="110" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">trace</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Labofgood\DbQueryLogExtended\Model\Service\ReportFormat\Prepper">
+        <arguments>
+            <argument name="headers" xsi:type="array">
+                <item name="0" xsi:type="string">UID</item>
+                <item name="10" xsi:type="string">RECORD</item>
+                <item name="20" xsi:type="string">REQUEST URI/CLI COMMAND</item>
+                <item name="30" xsi:type="string">EXECUTION TIME</item>
+                <item name="40" xsi:type="string">TIMESTAMP</item>
+                <item name="50" xsi:type="string">TYPE</item>
+                <item name="60" xsi:type="string">SQL</item>
+                <item name="70" xsi:type="string">BIND</item>
+                <item name="80" xsi:type="string">AFFECTED ROWS</item>
+                <item name="90" xsi:type="string">TRACE</item>
+            </argument>
+            <argument name="map" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">uid</item>
+                    </item>
+                </item>
+                <item name="10" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">record</item>
+                    </item>
+                </item>
+                <item name="20" xsi:type="array">
+                    <item name="method" xsi:type="string">requestUri</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key1" xsi:type="string">request_uri</item>
+                        <item name="key2" xsi:type="string">cli_command</item>
+                    </item>
+                </item>
+                <item name="30" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">time</item>
+                    </item>
+                </item>
+                <item name="40" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">timestamp</item>
+                    </item>
+                </item>
+                <item name="50" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">type</item>
+                    </item>
+                </item>
+                <item name="60" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">sql</item>
+                    </item>
+                </item>
+                <item name="70" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">bind</item>
+                    </item>
+                </item>
+                <item name="80" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">aff</item>
+                    </item>
+                </item>
+                <item name="90" xsi:type="array">
+                    <item name="method" xsi:type="string">map</item>
+                    <item name="args" xsi:type="array">
+                        <item name="key" xsi:type="string">trace</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
