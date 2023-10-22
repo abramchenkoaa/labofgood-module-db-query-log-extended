@@ -54,8 +54,10 @@ class LogsToReportFacade implements LogsToReportFacadeInterface
         $preparedData = $this->logRecordsCombiner->combine($parsedData);
         $reportData = $this->reportFormatPrepper->forReport($preparedData);
 
-        return $this->reportGenerator
-            ->setOutputDirectory($outputFile)
-            ->generate($reportData);
+        if ($outputFile) {
+            $this->reportGenerator->setOutputDirectory($outputFile);
+        }
+
+        return $this->reportGenerator->generate($reportData);
     }
 }

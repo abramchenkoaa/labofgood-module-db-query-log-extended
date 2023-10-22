@@ -124,7 +124,7 @@ class ReportGenerator implements ReportGeneratorInterface
             . DIRECTORY_SEPARATOR
             . 'debug'
             . DIRECTORY_SEPARATOR
-            . 'similarity_reports';
+            . 'reports';
     }
 
     /**
