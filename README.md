@@ -10,6 +10,14 @@ This module enriches the standard command functionalities by introducing:
 - Capability to export the log to an XLSX file format.
 - A feature to do a similarity analysis of SQL queries and showcase them in a separate XLSX sheet.
 
+Example of the report: 
+![image](https://github.com/abramchenkoaa/labofgood-module-db-query-log-extended/assets/3831358/97c52031-3cf2-4522-b0d2-9647687c6c6e)
+![image](https://github.com/abramchenkoaa/labofgood-module-db-query-log-extended/assets/3831358/a250e86a-379e-48b5-89ea-c8e7142094fc)
+
+Example of the similarity analysis report:
+![image](https://github.com/abramchenkoaa/labofgood-module-db-query-log-extended/assets/3831358/2027e0fa-5da0-40fa-a67e-7421ec344ed5)
+
+
 ## Prerequisites
  - PHP 8.1 or higher
  - Magento 2.4.5
@@ -22,7 +30,7 @@ composer.json includes:
 ```
 
 ## Installation Steps
-Please follow the instruction:
+Please follow the instructions:
 
 - Run `composer require labofgood/module-db-query-log-extended`
 - Run `bin/magento setup:upgrade`
