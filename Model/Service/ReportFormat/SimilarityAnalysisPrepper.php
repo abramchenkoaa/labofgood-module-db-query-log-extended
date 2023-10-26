@@ -24,12 +24,30 @@ class SimilarityAnalysisPrepper implements SimilarityAnalysisPrepperInterface
      * @param string $sortKey
      * @param string[] $headers
      * @param array<string, array{'method': string, 'args'?: string[]}> $map
+     * @param array{
+     *     'fieldNumber': int,
+     *     'rules': array{
+     *         'criteria': array{
+     *             'gteq': float,
+     *             'color': string
+     *         },
+     *         'high': array{
+     *              'gteq': float,
+     *              'color': string
+     *         },
+     *         'warning': array{
+     *              'gteq': float,
+     *              'color': string
+     *         }
+     *     }
+     * } $highlighting
      * @param string[][] $rows
      */
     public function __construct(
         private readonly string $sortKey,
         private readonly array $headers,
         private readonly array $map,
+        private readonly array $highlighting,
         private array $rows = []
     ) {
     }
@@ -51,6 +69,7 @@ class SimilarityAnalysisPrepper implements SimilarityAnalysisPrepperInterface
 
             foreach ($analyzedDataItem as $logs) {
                 $record = $this->generateRecord($logs);
+                $record = $this->highlightRecord($record);
                 ksort($record);
                 $tmpRows[$logs[0][$this->sortKey]] = $record;
             }
@@ -89,6 +108,35 @@ class SimilarityAnalysisPrepper implements SimilarityAnalysisPrepperInterface
         foreach ($this->map as $recordKey => $callback) {
             $args = [$logs, ...($callback['args'] ?? [])];
             $record[(int) $recordKey] = (string) $this->{$callback['method']}(...$args);
+        }
+
+        return $record;
+    }
+
+    /**
+     * Highlight record.
+     *
+     * @param string[] $record
+     *
+     * @return string[]
+     */
+    private function highlightRecord(array $record): array
+    {
+        $totalExecutionTime = $record[$this->highlighting['fieldNumber']];
+
+        foreach ($this->highlighting['rules'] as $rule) {
+            if ($totalExecutionTime >= $rule['gteq']) {
+                foreach ($record as &$item) {
+                    $item = sprintf(
+                        '<style bgcolor="%s">%s</style>',
+                        $rule['color'],
+                        $item
+                    );
+                }
+
+                unset($item);
+                break;
+            }
         }
 
         return $record;

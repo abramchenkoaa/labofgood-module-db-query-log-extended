@@ -247,6 +247,23 @@
                     </item>
                 </item>
             </argument>
+            <argument name="highlighting" xsi:type="array">
+                <item name="fieldNumber" xsi:type="number">50</item>
+                <item name="rules" xsi:type="array">
+                    <item name="critical" xsi:type="array">
+                        <item name="gteq" xsi:type="string">0.3</item>
+                        <item name="color" xsi:type="string">#f55658</item>
+                    </item>
+                    <item name="high" xsi:type="array">
+                        <item name="gteq" xsi:type="string">0.1</item>
+                        <item name="color" xsi:type="string">#f7a133</item>
+                    </item>
+                    <item name="warning" xsi:type="array">
+                        <item name="gteq" xsi:type="string">0.02</item>
+                        <item name="color" xsi:type="string">#f1ed08</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </type>
     <type name="Labofgood\DbQueryLogExtended\Model\Service\ReportFormat\Prepper">
