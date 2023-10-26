@@ -15,7 +15,7 @@ Example of the report:
 ![image](https://github.com/abramchenkoaa/labofgood-module-db-query-log-extended/assets/3831358/a250e86a-379e-48b5-89ea-c8e7142094fc)
 
 Example of the similarity analysis report:
-![image](https://github.com/abramchenkoaa/labofgood-module-db-query-log-extended/assets/3831358/2027e0fa-5da0-40fa-a67e-7421ec344ed5)
+![image](https://github.com/abramchenkoaa/labofgood-module-db-query-log-extended/assets/3831358/05a154ee-1aef-4b76-a025-76946796e2b9)
 
 
 ## Prerequisites
