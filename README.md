@@ -1,4 +1,4 @@
-# Labofgood_DbQueryLogExtended module
+# Database Query Log Extended magento2 module
 
 ## Overview
 The `Labofgood_DbQueryLogExtended` module offers enhanced analysis capabilities for the `db.log` generated using Magento's command:
@@ -62,5 +62,5 @@ To uninstall the module, run: `bin/magento module:uninstall Labofgood_DbQueryLog
  - Anton Abramchenko <anton.abramchenko@labofgood.com>
 
 ## Licensing
-This software is under the Open Software License (OSL 3.0). 
-More details can be found at http://opensource.org/licenses/osl-3.0.php.
+Copyright © 2023 Anton Abramchenko. All rights reserved.\
+This software is under the "3-Clause BSD License" license (see source). 

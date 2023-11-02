@@ -1,0 +1,6 @@
+Copyright © 2023 Anton Abramchenko. All rights reserved.
+
+All files in this repository are licensed under the BSD-3-Clause license
+
+https://opensource.org/license/bsd-3-clause/ The 3-Clause BSD License (BSD-3-Clause)
+Please see LICENSE.txt for the full text of the BSD-3-Clause license or contact anton.abramchenko@labofgood.com for a copy.
