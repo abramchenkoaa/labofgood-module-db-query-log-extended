@@ -2,6 +2,9 @@
     "name": "labofgood/module-db-query-log-extended",
     "description": "The module enhances the DB logger functionality, offering the capability to display DB logs in the xlsx format and produce a report analyzing query similarities.",
     "type": "magento2-module",
+    "keywords": [
+        "dev"
+    ],
     "require": {
         "php": "^8.1",
         "magento/framework": "103.0.*",

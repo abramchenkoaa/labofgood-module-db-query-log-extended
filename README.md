@@ -32,7 +32,7 @@ composer.json includes:
 ## Installation Steps
 Please follow the instructions:
 
-- Run `composer require labofgood/module-db-query-log-extended`
+- Run `composer require --dev labofgood/module-db-query-log-extended`
 - Run `bin/magento setup:upgrade`
 
 ## Usage Guide
